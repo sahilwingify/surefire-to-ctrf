@@ -27,7 +27,7 @@ The only way we can grow CTRF is with your help and the support of the software 
 ## Usage
 
 ```sh
-npx junit-to-ctrf /path/to/junit.xml
+npx junit-to-ctrf path/to/junit.xml
 ```
 
 ## Options
