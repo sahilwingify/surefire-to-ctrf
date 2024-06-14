@@ -70,7 +70,7 @@ Convert a JUnit XML report and include environment properties in the CTRF report
 npx junit-to-ctrf /path/to/junit.xml -e appName=MyApp buildName=MyBuild
 ```
 
-See [](https://www.ctrf.io/docs/schema/environment)
+See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible environment properties
 
 ### Full Command
 
