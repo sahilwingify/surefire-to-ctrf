@@ -43,7 +43,7 @@ npx junit-to-ctrf /path/to/junit.xml
 Convert a JUnit XML report to the default CTRF report location (ctrf/ctrf-report.json):
 
 ```sh
-npx junit-to-ctrf /path/to/junit.xml
+npx junit-to-ctrf path/to/junit.xml
 ```
 
 ### Specify Output File
@@ -51,7 +51,7 @@ npx junit-to-ctrf /path/to/junit.xml
 Convert a JUnit XML report to a specified output file:
 
 ```sh
-npx junit-to-ctrf /path/to/junit.xml -o /path/to/output/ctrf-report.json
+npx junit-to-ctrf path/to/junit.xml -o path/to/output/ctrf-report.json
 ```
 
 ### Include Tool Name
@@ -59,7 +59,7 @@ npx junit-to-ctrf /path/to/junit.xml -o /path/to/output/ctrf-report.json
 Convert a JUnit XML report and include a tool name in the CTRF report:
 
 ```sh
-npx junit-to-ctrf /path/to/junit.xml -t ExampleTool
+npx junit-to-ctrf path/to/junit.xml -t ExampleTool
 ```
 
 ### Include Environment Properties
@@ -67,7 +67,7 @@ npx junit-to-ctrf /path/to/junit.xml -t ExampleTool
 Convert a JUnit XML report and include environment properties in the CTRF report:
 
 ```sh
-npx junit-to-ctrf /path/to/junit.xml -e appName=MyApp buildName=MyBuild
+npx junit-to-ctrf path/to/junit.xml -e appName=MyApp buildName=MyBuild
 ```
 
 See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible environment properties
@@ -77,7 +77,7 @@ See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible envi
 Combine all options in a single command:
 
 ```sh
-npx junit-to-ctrf /path/to/junit.xml -o /path/to/output/ctrf-report.json -t ExampleTool -e appName=MyApp buildName=MyBuild
+npx junit-to-ctrf path/to/junit.xml -o path/to/output/ctrf-report.json -t ExampleTool -e appName=MyApp buildName=MyBuild
 ```
 
 ## What is CTRF?
