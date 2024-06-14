@@ -129,7 +129,7 @@ export async function convertJUnitToCTRF(
   const ctrfReport = createCTRFReport(testCases, toolName, envPropsObj);
 
   const defaultOutputPath = path.join('ctrf', 'ctrf-report.json');
-  const finalOutputPath = outputPath || defaultOutputPath;
+  const finalOutputPath = path.resolve(outputPath || defaultOutputPath);
 
   const outputDir = path.dirname(finalOutputPath);
   await fs.ensureDir(outputDir);
