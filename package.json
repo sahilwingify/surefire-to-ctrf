@@ -1,0 +1,31 @@
+{
+  "name": "junit-to-ctrf",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "junit-to-ctrf": "./dist/cli.js"
+  },
+  "files": [
+    "dist/",
+    "README.md"
+  ],
+  "author": "Matthew Thomas",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "typescript": "^5.4.5",
+    "xml2js": "^0.6.2",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.12.7",
+    "@types/xml2js": "^0.4.14",
+    "@types/yargs": "^17.0.32",
+    "typescript": "^5.4.5"
+  }
+}
