@@ -2,6 +2,8 @@
 
 > Convert JUnit reports to CTRF reports
 
+This package is useful if there isn't a CTRF reporter available for your test framework.
+
 ⭐ **If you find this project useful, consider giving it a GitHub star** ⭐
 
 It means a lot to us and helps us grow this open source library.
