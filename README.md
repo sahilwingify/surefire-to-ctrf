@@ -4,9 +4,11 @@
 
 This package is useful if there isn't a CTRF reporter available for your test framework.
 
-⭐ **If you find this project useful, consider giving it a GitHub star** ⭐
+## Help us grow CTRF
 
-It means a lot to us and helps us grow this open source library.
+⭐ **If you find this project useful, please consider following the [CTRF organisation](https://github.com/ctrf-io) and giving this repository a star** ⭐
+
+**It means a lot to us and helps us grow this open source library.**
 
 ## Usage
 
