@@ -19,4 +19,4 @@ jobs:
     - name: Build
       run: npx tsc
     - name: Convert
-      run: npx junit-to-ctrf test.xml
+      run: npx testng-to-ctrf testng-results.xml
