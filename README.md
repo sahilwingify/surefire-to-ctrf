@@ -1,6 +1,6 @@
-# Convert JUnit XML to CTRF JSON
+# Convert TestNG XML to CTRF JSON
 
-> Convert JUnit reports to CTRF reports
+> Convert TestNG reports to CTRF reports
 
 This package is useful if there isn't a CTRF reporter available for your test framework.
 
@@ -13,7 +13,7 @@ This package is useful if there isn't a CTRF reporter available for your test fr
 ## Usage
 
 ```sh
-npx junit-to-ctrf path/to/junit.xml
+npx testng-to-ctrf path/to/testng-results.xml
 ```
 
 ## Options
@@ -26,34 +26,34 @@ npx junit-to-ctrf path/to/junit.xml
 
 ## Examples
 
-Convert a JUnit XML report to the default CTRF report location (ctrf/ctrf-report.json):
+Convert a TestNG XML report to the default CTRF report location (ctrf/ctrf-report.json):
 
 ```sh
-npx junit-to-ctrf path/to/junit.xml
+npx testng-to-ctrf path/to/testng-results.xml
 ```
 
 ### Specify Output File
 
-Convert a JUnit XML report to a specified output file:
+Convert a TestNG XML report to a specified output file:
 
 ```sh
-npx junit-to-ctrf path/to/junit.xml -o path/to/output/ctrf-report.json
+npx testng-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json
 ```
 
 ### Include Tool Name
 
-Convert a JUnit XML report and include a tool name in the CTRF report:
+Convert a TestNG XML report and include a tool name in the CTRF report:
 
 ```sh
-npx junit-to-ctrf path/to/junit.xml -t ExampleTool
+npx testng-to-ctrf path/to/testng-results.xml -t ExampleTool
 ```
 
 ### Include Environment Properties
 
-Convert a JUnit XML report and include environment properties in the CTRF report:
+Convert a TestNG XML report and include environment properties in the CTRF report:
 
 ```sh
-npx junit-to-ctrf path/to/junit.xml -e appName=MyApp buildName=MyBuild
+npx testng-to-ctrf path/to/testng-results.xml -e appName=MyApp buildName=MyBuild
 ```
 
 See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible environment properties
@@ -63,7 +63,7 @@ See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible envi
 Combine all options in a single command:
 
 ```sh
-npx junit-to-ctrf path/to/junit.xml -o path/to/output/ctrf-report.json -t ExampleTool -e appName=MyApp buildName=MyBuild
+npx testng-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json -t ExampleTool -e appName=MyApp buildName=MyBuild
 ```
 
 ## What is CTRF?

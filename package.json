@@ -1,19 +1,22 @@
 {
-  "name": "junit-to-ctrf",
-  "version": "0.0.4",
+  "name": "testng-to-ctrf",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "junit-to-ctrf": "./dist/cli.js"
+    "testng-to-ctrf": "./dist/cli.js"
   },
   "files": [
     "dist/",
     "README.md"
   ],
-  "author": "Matthew Thomas",
+  "authors": [
+    "Matthew Thomas",
+    "Sahil Goyal"
+  ],
   "license": "MIT",
   "dependencies": {
     "fs-extra": "^11.2.0",
