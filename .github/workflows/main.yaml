@@ -19,4 +19,4 @@ jobs:
     - name: Build
       run: npx tsc
     - name: Convert
-      run: npx testng-to-ctrf testng-results.xml
+      run: npx surefire-to-ctrf testng-results.xml

@@ -13,7 +13,7 @@ This package is useful if there isn't a CTRF reporter available for your test fr
 ## Usage
 
 ```sh
-npx testng-to-ctrf path/to/testng-results.xml
+npx surefire-to-ctrf path/to/testng-results.xml
 ```
 
 ## Options
@@ -29,7 +29,7 @@ npx testng-to-ctrf path/to/testng-results.xml
 Convert a TestNG XML report to the default CTRF report location (ctrf/ctrf-report.json):
 
 ```sh
-npx testng-to-ctrf path/to/testng-results.xml
+npx surefire-to-ctrf path/to/testng-results.xml
 ```
 
 ### Specify Output File
@@ -37,7 +37,7 @@ npx testng-to-ctrf path/to/testng-results.xml
 Convert a TestNG XML report to a specified output file:
 
 ```sh
-npx testng-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json
+npx surefire-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json
 ```
 
 ### Include Tool Name
@@ -45,7 +45,7 @@ npx testng-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json
 Convert a TestNG XML report and include a tool name in the CTRF report:
 
 ```sh
-npx testng-to-ctrf path/to/testng-results.xml -t ExampleTool
+npx surefire-to-ctrf path/to/testng-results.xml -t ExampleTool
 ```
 
 ### Include Environment Properties
@@ -53,7 +53,7 @@ npx testng-to-ctrf path/to/testng-results.xml -t ExampleTool
 Convert a TestNG XML report and include environment properties in the CTRF report:
 
 ```sh
-npx testng-to-ctrf path/to/testng-results.xml -e appName=MyApp buildName=MyBuild
+npx surefire-to-ctrf path/to/testng-results.xml -e appName=MyApp buildName=MyBuild
 ```
 
 See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible environment properties
@@ -63,7 +63,7 @@ See [CTRF schema](https://www.ctrf.io/docs/schema/environment) for possible envi
 Combine all options in a single command:
 
 ```sh
-npx testng-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json -t ExampleTool -e appName=MyApp buildName=MyBuild
+npx surefire-to-ctrf path/to/testng-results.xml -o path/to/output/ctrf-report.json -t ExampleTool -e appName=MyApp buildName=MyBuild
 ```
 
 ## What is CTRF?
