@@ -1,7 +1,10 @@
 import fs from "fs-extra";
 import path from "path";
 import { parseString } from "xml2js";
-import { CtrfReport, CtrfTest, CtrfTestState, Tool } from "../types/ctrf";
+import { CtrfReport, CtrfTest, Tool } from "../types/ctrf";
+
+// Update the CtrfTestState type
+type CtrfTestState = "passed" | "failed" | "skipped" | "pending" | "other";
 
 interface TestNGTestCase {
   name: string;
@@ -66,67 +69,141 @@ async function parseTestNGReport(
   return new Promise((resolve, reject) => {
     parseString(xml, (err, result) => {
       if (err) {
-        reject(err);
-      } else {
+        console.error("Failed to parse XML:", err);
+        reject(new Error(`Failed to parse TestNG XML: ${err.message}`));
+        return;
+      }
+
+      try {
         const testCases: TestNGTestCase[] = [];
         const testngResults = result["testng-results"];
-        const suite = testngResults.suite[0];
+        
+        if (!testngResults) {
+          console.error("Invalid XML structure: Missing testng-results element");
+          reject(new Error("Invalid TestNG report format: missing testng-results"));
+          return;
+        }
+
+        const suite = testngResults?.suite?.[0];
+        if (!suite) {
+          console.error("Invalid XML structure: Missing or empty suite element");
+          reject(new Error("Invalid TestNG report format: missing suite"));
+          return;
+        }
 
         // Find the beforeSuite method for start time
-        let startedAt = suite.$["started-at"]; // Default to suite start time
-        const finishedAt = suite.$["finished-at"]; // Keep end time from suite
+        let startedAt = suite.$?.["started-at"];
+        const finishedAt = suite.$?.["finished-at"];
+
+        if (!startedAt || !finishedAt) {
+          console.warn("Missing timestamp attributes in suite:", {
+            startedAt: startedAt || "MISSING",
+            finishedAt: finishedAt || "MISSING"
+          });
+        }
 
         if (suite.test && Array.isArray(suite.test)) {
-          const beforeSuiteMethod = suite.test
-            .flatMap((test: { class: any; }) => test.class || [])
-            .flatMap((classItem: { [x: string]: any; }) => classItem["test-method"] || [])
-            .find((method: { $: { name: string; }; }) => method.$.name === "beforeSuite");
-
-          if (beforeSuiteMethod) {
-            startedAt = beforeSuiteMethod.$["started-at"];
+          try {
+            const beforeSuiteMethod = suite.test
+              .flatMap((test: any) => {
+                if (!test.class) {
+                  console.warn(`Test missing class element: ${test.$?.name || "unnamed test"}`);
+                  return [];
+                }
+                return test.class || [];
+              })
+              .flatMap((classItem: any) => {
+                if (!classItem["test-method"]) {
+                  console.warn(`Class missing test-method element: ${classItem.$?.name || "unnamed class"}`);
+                  return [];
+                }
+                return classItem["test-method"] || [];
+              })
+              .find((method: any) => method.$ && method.$.name === "beforeSuite");
+            
+            if (beforeSuiteMethod) {
+              startedAt = beforeSuiteMethod.$["started-at"];
+              console.log("Using beforeSuite method start time:", startedAt);
+            }
+          } catch (error) {
+            console.error("Error processing beforeSuite method:", error);
           }
         }
 
         // Extract test result counts and suite information
         const results: TestNGResults = {
-          total: parseInt(testngResults.$["total"], 10),
-          passed: parseInt(testngResults.$["passed"], 10),
-          failed: parseInt(testngResults.$["failed"], 10),
-          skipped: parseInt(testngResults.$["skipped"], 10),
-          ignored: parseInt(testngResults.$["ignored"], 10),
+          total: parseInt(testngResults.$["total"], 10) || 0,
+          passed: parseInt(testngResults.$["passed"], 10) || 0,
+          failed: parseInt(testngResults.$["failed"], 10) || 0,
+          skipped: parseInt(testngResults.$["skipped"], 10) || 0,
+          ignored: parseInt(testngResults.$["ignored"], 10) || 0,
           startTime: parseDate(startedAt),
           endTime: parseDate(finishedAt),
-          suiteName: suite.$["name"],
+          suiteName: suite.$?.["name"] || "Unknown Suite",
         };
 
-        // Process test cases
-        suite.test.forEach((test: any) => {
-          test.class.forEach((classObj: any) => {
-            classObj["test-method"].forEach((method: any) => {
-              if (method.$.is_config !== "true") {
-                const startTime = parseDate(method.$["started-at"]);
-                const endTime = parseDate(method.$["finished-at"]);
-                const testCase: TestNGTestCase = {
-                  name: `${test.$.name}: ${method.$.name}`,
-                  status: method.$.status.toLowerCase(),
-                  duration: parseInt(method.$["duration-ms"], 10),
-                  startTime,
-                  endTime,
-                };
-
-                // Add message and trace for failed tests
-                if (method.exception && method.exception.length > 0) {
-                  testCase.message = method.exception[0].message[0];
-                  testCase.trace = method.exception[0]["full-stacktrace"][0];
-                }
-
-                testCases.push(testCase);
-              }
-            });
-          });
+        console.log("Parsed test results:", {
+          total: results.total,
+          passed: results.passed,
+          failed: results.failed,
+          skipped: results.skipped,
+          ignored: results.ignored
         });
 
+        // Process test cases with safer property access
+        if (Array.isArray(suite.test)) {
+          suite.test.forEach((test: any, testIndex: number) => {
+            if (!test.class || !Array.isArray(test.class)) {
+              console.warn(`Invalid test structure at index ${testIndex}: missing or invalid class array`);
+              return;
+            }
+            
+            test.class.forEach((classObj: any, classIndex: number) => {
+              if (!classObj["test-method"] || !Array.isArray(classObj["test-method"])) {
+                console.warn(`Invalid class structure at test ${testIndex}, class ${classIndex}: missing or invalid test-method array`);
+                return;
+              }
+
+              classObj["test-method"].forEach((method: any, methodIndex: number) => {
+                try {
+                  if (!method.$ || method.$.is_config === "true") return;
+
+                  const testCase: TestNGTestCase = {
+                    name: `${test.$.name || "Unknown Test"}: ${method.$.name || "Unknown Method"}`,
+                    status: (method.$.status || "other").toLowerCase(),
+                    duration: parseInt(method.$["duration-ms"], 10) || 0,
+                    startTime: parseDate(method.$["started-at"]),
+                    endTime: parseDate(method.$["finished-at"]),
+                  };
+
+                  // Safely add message and trace for failed tests
+                  if (method.exception?.[0]) {
+                    if (method.exception[0].message?.[0]) {
+                      testCase.message = method.exception[0].message[0];
+                    }
+                    if (method.exception[0]["full-stacktrace"]?.[0]) {
+                      testCase.trace = method.exception[0]["full-stacktrace"][0];
+                    }
+                  }
+
+                  testCases.push(testCase);
+                } catch (error) {
+                  console.error(`Error processing test method at test ${testIndex}, class ${classIndex}, method ${methodIndex}:`, error);
+                  console.error('Method data:', JSON.stringify(method, null, 2));
+                }
+              });
+            });
+          });
+        }
+
+        console.log(`Successfully parsed ${testCases.length} test cases`);
         resolve({ testCases, results });
+
+      } catch (error) {
+        console.error("Error parsing TestNG report:", error);
+        console.error("Partial parsed data:", JSON.stringify(result, null, 2));
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        reject(new Error(`Failed to parse TestNG report: ${errorMessage}`));
       }
     });
   });
